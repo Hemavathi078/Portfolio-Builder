@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .font-space {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+.print-only {
+  display: none;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-only {
+    display: block !important;
+  }
+}
+
+/* ===== PDF EXPORT MODE - STRICT RULES ===== */
+.pdf-export-mode svg,
+.pdf-export-mode i,
+.pdf-export-mode .icon,
+.pdf-export-mode .react-icons,
+.pdf-export-mode .pdf-icon,
+.pdf-exporting svg,
+.pdf-exporting i,
+.pdf-exporting .icon,
+.pdf-exporting .react-icons,
+.pdf-exporting .pdf-icon {
+  display: none !important;
+}
+
+.pdf-export-mode *,
+.pdf-exporting * {
+  box-shadow: none !important;
+  filter: none !important;
+  animation: none !important;
+  transition: none !important;
+  backdrop-filter: none !important;
+}
+
+.pdf-export-mode,
+.pdf-exporting {
+  background: #ffffff !important;
+}
+
+.pdf-export-mode #resume-preview,
+.pdf-export-mode #portfolio-preview,
+.pdf-exporting {
+  background: #ffffff !important;
+  color: #000000 !important;
+  font-family: Inter, Arial, Helvetica, sans-serif !important;
+}
+
+/* PDF Export - Show text-only contact info */
+.pdf-export-mode .pdf-text-only,
+.pdf-exporting .pdf-text-only {
+  display: inline !important;
+}
+
+/* PDF Export - Hide certain elements */
+.pdf-export-mode .pdf-hide,
+.pdf-exporting .pdf-hide {
+  display: none !important;
+}
+
+/* PDF Export - Ensure solid, thick borders */
+.pdf-export-mode hr,
+.pdf-export-mode .border,
+.pdf-export-mode [class*="border"],
+.pdf-exporting hr,
+.pdf-exporting .border,
+.pdf-exporting [class*="border"] {
+  border-width: 2px !important;
+  border-style: solid !important;
+}
+
+/* PDF Export - Force proper text rendering */
+.pdf-export-mode *,
+.pdf-exporting * {
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+  color-adjust: exact;
+}
+
+/* Resume specific PDF styles */
+#resume-preview {
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  max-width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+/* Section divider - PDF safe */
+.section-divider {
+  height: 2px;
+  background-color: #999999;
+  width: 100%;
+  margin: 12px 0;
+  border: none;
+}
