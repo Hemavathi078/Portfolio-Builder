@@ -82,7 +82,7 @@ const LandingPage = () => {
                 <Sparkles className="text-white" size={20} />
               </div>
               <span className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-900 to-cyan-600 bg-clip-text text-transparent">
-                ResumeBuilder
+                PortfolioPress
               </span>
             </motion.div>
 
@@ -494,7 +494,7 @@ const LandingPage = () => {
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-600 to-cyan-400 flex items-center justify-center">
                   <Sparkles size={20} />
                 </div>
-                <span className="text-xl font-bold font-bold">ResumeBuilder</span>
+                <span className="text-xl font-bold font-bold">PortfolioPress</span>
               </div>
               <p className="text-white/70 text-sm">
                 Build professional resumes and portfolios in minutes. No design skills required.
@@ -531,7 +531,7 @@ const LandingPage = () => {
 
           <div className="border-t border-white/20 pt-8 text-center">
             <p className="text-white/60 text-sm">
-              © 2026 ResumeBuilder. Made with ❤️ for job seekers worldwide.
+              © 2026 PortfolioPress. Made with ❤️ for job seekers worldwide.
             </p>
           </div>
         </div>
