@@ -1,10 +1,11 @@
 import { Plus, Trash2, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useAppContext } from '../../context/AppContext';
 import Input from '../common/Input';
 import Button from '../common/Button';
 import Card from '../common/Card';
 import { generateUniqueId } from '../../utils/exportPdf';
+import { getFilteredSuggestions } from '../../data/skillSuggestions';
 
 const SkillsForm = () => {
   const { state, dispatch, actionTypes } = useAppContext();
@@ -16,6 +17,53 @@ const SkillsForm = () => {
   const [technicalInput, setTechnicalInput] = useState('');
   const [toolsInput, setToolsInput] = useState('');
   const [softInput, setSoftInput] = useState('');
+  
+  // Autocomplete states
+  const [technicalSuggestions, setTechnicalSuggestions] = useState([]);
+  const [toolsSuggestions, setToolsSuggestions] = useState([]);
+  const [softSuggestions, setSoftSuggestions] = useState([]);
+  const [showTechnicalSuggestions, setShowTechnicalSuggestions] = useState(false);
+  const [showToolsSuggestions, setShowToolsSuggestions] = useState(false);
+  const [showSoftSuggestions, setShowSoftSuggestions] = useState(false);
+  
+  // Refs for click outside detection
+  const technicalRef = useRef(null);
+  const toolsRef = useRef(null);
+  const softRef = useRef(null);
+
+  // Handle click outside to close suggestions
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (technicalRef.current && !technicalRef.current.contains(event.target)) {
+        setShowTechnicalSuggestions(false);
+      }
+      if (toolsRef.current && !toolsRef.current.contains(event.target)) {
+        setShowToolsSuggestions(false);
+      }
+      if (softRef.current && !softRef.current.contains(event.target)) {
+        setShowSoftSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Update suggestions as user types
+  const handleInputChange = (category, value, setInputValue, setSuggestions, setShowSuggestions) => {
+    setInputValue(value);
+    const filtered = getFilteredSuggestions(category, value);
+    setSuggestions(filtered);
+    setShowSuggestions(filtered.length > 0 && value.length > 0);
+  };
+
+  // Select suggestion
+  const selectSuggestion = (suggestion, category, setInputValue, setShowSuggestions) => {
+    setInputValue(suggestion);
+    setShowSuggestions(false);
+    // Auto-add the skill
+    addSkillToCategory(category, suggestion, setInputValue);
+  };
 
   // Visual skills (with progress bars)
   const addSkill = () => {
@@ -177,7 +225,7 @@ const SkillsForm = () => {
       ) : (
         <div className="space-y-6">
           {/* Technical Skills */}
-          <div>
+          <div ref={technicalRef} className="relative">
             <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
               Technical Skills
             </label>
@@ -185,8 +233,9 @@ const SkillsForm = () => {
               <input
                 type="text"
                 value={technicalInput}
-                onChange={(e) => setTechnicalInput(e.target.value)}
+                onChange={(e) => handleInputChange('technical', e.target.value, setTechnicalInput, setTechnicalSuggestions, setShowTechnicalSuggestions)}
                 onKeyDown={(e) => handleKeyDown(e, 'technical', technicalInput, setTechnicalInput)}
+                onFocus={() => technicalInput && setShowTechnicalSuggestions(technicalSuggestions.length > 0)}
                 placeholder="Type skill and press Enter (e.g., JavaScript, React)"
                 className="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
@@ -197,6 +246,22 @@ const SkillsForm = () => {
                 Add
               </button>
             </div>
+            
+            {/* Autocomplete Suggestions */}
+            {showTechnicalSuggestions && technicalSuggestions.length > 0 && (
+              <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                {technicalSuggestions.map((suggestion, index) => (
+                  <button
+                    key={index}
+                    onClick={() => selectSuggestion(suggestion, 'technical', setTechnicalInput, setShowTechnicalSuggestions)}
+                    className="w-full text-left px-4 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-gray-900 dark:text-gray-100 transition-colors text-sm"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            )}
+            
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               Press Enter or click Add. Use commas to add multiple skills at once.
             </p>
@@ -221,7 +286,7 @@ const SkillsForm = () => {
           </div>
 
           {/* Tools & Technologies */}
-          <div>
+          <div ref={toolsRef} className="relative">
             <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
               Tools & Technologies
             </label>
@@ -229,8 +294,9 @@ const SkillsForm = () => {
               <input
                 type="text"
                 value={toolsInput}
-                onChange={(e) => setToolsInput(e.target.value)}
+                onChange={(e) => handleInputChange('tools', e.target.value, setToolsInput, setToolsSuggestions, setShowToolsSuggestions)}
                 onKeyDown={(e) => handleKeyDown(e, 'tools', toolsInput, setToolsInput)}
+                onFocus={() => toolsInput && setShowToolsSuggestions(toolsSuggestions.length > 0)}
                 placeholder="Type tool and press Enter (e.g., Git, Docker)"
                 className="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
@@ -241,6 +307,22 @@ const SkillsForm = () => {
                 Add
               </button>
             </div>
+            
+            {/* Autocomplete Suggestions */}
+            {showToolsSuggestions && toolsSuggestions.length > 0 && (
+              <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                {toolsSuggestions.map((suggestion, index) => (
+                  <button
+                    key={index}
+                    onClick={() => selectSuggestion(suggestion, 'tools', setToolsInput, setShowToolsSuggestions)}
+                    className="w-full text-left px-4 py-2 hover:bg-green-50 dark:hover:bg-green-900/30 text-gray-900 dark:text-gray-100 transition-colors text-sm"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            )}
+            
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               Press Enter or click Add. Use commas to add multiple tools at once.
             </p>
@@ -265,7 +347,7 @@ const SkillsForm = () => {
           </div>
 
           {/* Soft Skills */}
-          <div>
+          <div ref={softRef} className="relative">
             <label className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
               Soft Skills
             </label>
@@ -273,8 +355,9 @@ const SkillsForm = () => {
               <input
                 type="text"
                 value={softInput}
-                onChange={(e) => setSoftInput(e.target.value)}
+                onChange={(e) => handleInputChange('soft', e.target.value, setSoftInput, setSoftSuggestions, setShowSoftSuggestions)}
                 onKeyDown={(e) => handleKeyDown(e, 'soft', softInput, setSoftInput)}
+                onFocus={() => softInput && setShowSoftSuggestions(softSuggestions.length > 0)}
                 placeholder="Type skill and press Enter (e.g., Leadership)"
                 className="flex-1 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               />
@@ -285,6 +368,22 @@ const SkillsForm = () => {
                 Add
               </button>
             </div>
+            
+            {/* Autocomplete Suggestions */}
+            {showSoftSuggestions && softSuggestions.length > 0 && (
+              <div className="absolute z-10 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                {softSuggestions.map((suggestion, index) => (
+                  <button
+                    key={index}
+                    onClick={() => selectSuggestion(suggestion, 'soft', setSoftInput, setShowSoftSuggestions)}
+                    className="w-full text-left px-4 py-2 hover:bg-purple-50 dark:hover:bg-purple-900/30 text-gray-900 dark:text-gray-100 transition-colors text-sm"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            )}
+            
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               Press Enter or click Add. Use commas to add multiple skills at once.
             </p>
