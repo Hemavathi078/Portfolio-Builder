@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Eye, Download, Layout, Sparkles, Users, GraduationCap, Briefcase, Code, Menu, X, ArrowRight, CheckCircle, Zap } from 'lucide-react';
+import { FileText, Eye, Download, Layout, Sparkles, Users, GraduationCap, Briefcase, Code, Menu, X, ArrowRight, CheckCircle, Zap, Palette, Laptop, Award, Target, Lightbulb } from 'lucide-react';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -31,11 +31,11 @@ const LandingPage = () => {
   ];
 
   const templates = [
-    { name: 'ATS-Friendly Resume', description: 'Clean & simple', icon: '📄' },
-    { name: 'Modern Resume', description: 'Minimal & stylish', icon: '✨' },
-    { name: 'Student / Fresher Resume', description: 'Perfect for beginners', icon: '🎓' },
-    { name: 'Developer Portfolio', description: 'Showcase your projects', icon: '💻' },
-    { name: 'Creative Portfolio', description: 'Stand out visually', icon: '🎨' },
+    { name: 'ATS-Friendly Resume', description: 'Clean & simple', icon: <FileText className="w-8 h-8" /> },
+    { name: 'Modern Resume', description: 'Minimal & stylish', icon: <Sparkles className="w-8 h-8" /> },
+    { name: 'Student / Fresher Resume', description: 'Perfect for beginners', icon: <GraduationCap className="w-8 h-8" /> },
+    { name: 'Developer Portfolio', description: 'Showcase your projects', icon: <Laptop className="w-8 h-8" /> },
+    { name: 'Creative Portfolio', description: 'Stand out visually', icon: <Palette className="w-8 h-8" /> },
   ];
 
   const steps = [
@@ -245,7 +245,7 @@ const LandingPage = () => {
               </div>
 
               <p className="text-sm text-white/75 italic px-4">
-                ✨ Choose from ready-made templates and customize easily
+                <Sparkles className="inline w-4 h-4 mr-1" /> Choose from ready-made templates and customize easily
               </p>
             </motion.div>
           </div>
@@ -337,7 +337,7 @@ const LandingPage = () => {
                 className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all border-2 border-cyan-600/20 hover:border-cyan-600/50"
               >
                 <div className="flex items-start gap-4">
-                  <div className="text-4xl">{template.icon}</div>
+                  <div className="text-cyan-600 flex-shrink-0">{template.icon}</div>
                   <div className="flex-1">
                     <h3 className="text-lg font-bold font-bold text-gray-900 mb-2">{template.name}</h3>
                     <p className="text-sm text-gray-600">{template.description}</p>

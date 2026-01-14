@@ -155,8 +155,23 @@ const ATSTemplate = ({ userData, visibleSections }) => {
                 {project.title}
               </p>
               {project.techStack && (
-                <p style={{ color: '#000000', fontSize: '13px', margin: '0 0 8px 0' }}>
+                <p style={{ color: '#000000', fontSize: '13px', margin: '0 0 4px 0' }}>
                   <strong>Technologies:</strong> {project.techStack}
+                </p>
+              )}
+              {(project.githubUrl || project.liveUrl) && (
+                <p style={{ color: '#0000EE', fontSize: '13px', margin: '0 0 8px 0' }}>
+                  {project.githubUrl && (
+                    <span>
+                      <strong style={{ color: '#000000' }}>GitHub:</strong> {project.githubUrl}
+                    </span>
+                  )}
+                  {project.githubUrl && project.liveUrl && <span style={{ margin: '0 8px', color: '#000000' }}>|</span>}
+                  {project.liveUrl && (
+                    <span>
+                      <strong style={{ color: '#000000' }}>Live:</strong> {project.liveUrl}
+                    </span>
+                  )}
                 </p>
               )}
               {project.description && (

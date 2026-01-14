@@ -206,8 +206,29 @@ const PortfolioPreview = () => {
               >
                 <h3 style={{ fontWeight: 'bold', color: textColor, fontSize: '16px', margin: '0 0 6px 0' }}>{project.title}</h3>
                 {project.techStack && (
-                  <p style={{ fontSize: '13px', color: accentColor, margin: '0 0 8px 0' }}>
+                  <p style={{ fontSize: '13px', color: accentColor, margin: '0 0 6px 0' }}>
                     <strong>Technologies:</strong> {project.techStack}
+                  </p>
+                )}
+                {(project.githubUrl || project.liveUrl) && (
+                  <p style={{ fontSize: '13px', margin: '0 0 8px 0' }}>
+                    {project.githubUrl && (
+                      <span>
+                        <strong style={{ color: textColor }}>GitHub:</strong>{' '}
+                        <a href={project.githubUrl} style={{ color: accentColor, textDecoration: 'none' }}>
+                          {project.githubUrl}
+                        </a>
+                      </span>
+                    )}
+                    {project.githubUrl && project.liveUrl && <span style={{ margin: '0 8px', color: textMuted }}>|</span>}
+                    {project.liveUrl && (
+                      <span>
+                        <strong style={{ color: textColor }}>Live:</strong>{' '}
+                        <a href={project.liveUrl} style={{ color: accentColor, textDecoration: 'none' }}>
+                          {project.liveUrl}
+                        </a>
+                      </span>
+                    )}
                   </p>
                 )}
                 {project.description && (
