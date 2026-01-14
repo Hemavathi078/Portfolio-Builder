@@ -1,10 +1,18 @@
-const ATSTemplate = ({ userData, visibleSections }) => {
+const ATSTemplate = ({ userData, visibleSections, theme }) => {
   const { personal, education, experience, skills, projects, skillCategories } = userData;
   const hasCategories = skillCategories?.technical?.length > 0 || skillCategories?.tools?.length > 0 || skillCategories?.soft?.length > 0;
 
+  // Font size mapping
+  const fontSizeMap = {
+    small: { base: '12px', heading: '24px', subheading: '13px', text: '11px', section: '13px' },
+    medium: { base: '14px', heading: '26px', subheading: '15px', text: '13px', section: '14px' },
+    large: { base: '16px', heading: '28px', subheading: '17px', text: '15px', section: '16px' },
+  };
+  const sizes = fontSizeMap[theme?.fontSize || 'medium'];
+
   // Common heading style
   const sectionHeadingStyle = {
-    fontSize: '14px',
+    fontSize: sizes.section,
     fontWeight: 'bold',
     color: '#000000',
     textTransform: 'uppercase',
@@ -45,7 +53,7 @@ const ATSTemplate = ({ userData, visibleSections }) => {
     <div 
       style={{ 
         fontFamily: 'Arial, sans-serif', 
-        fontSize: '14px',
+        fontSize: sizes.base,
         backgroundColor: '#ffffff',
         color: '#000000',
         padding: '40px 50px',
@@ -54,12 +62,12 @@ const ATSTemplate = ({ userData, visibleSections }) => {
     >
       {/* Header */}
       <div style={{ marginBottom: '18px', ...itemStyle }}>
-        <h1 style={{ fontSize: '26px', fontWeight: 'bold', color: '#000000', textTransform: 'uppercase', marginBottom: '8px' }}>
+        <h1 style={{ fontSize: sizes.heading, fontWeight: 'bold', color: '#000000', textTransform: 'uppercase', marginBottom: '8px' }}>
           {personal.fullName || 'YOUR NAME'}
         </h1>
         
         {/* Contact Info - Single Line */}
-        <div style={{ fontSize: '13px', color: '#000000' }}>
+        <div style={{ fontSize: sizes.text, color: '#000000' }}>
           {[
             personal.linkedin && <span key="linkedin" style={{ color: '#0000EE' }}>{personal.linkedin}</span>,
             personal.email && <span key="email">{personal.email}</span>,
@@ -119,10 +127,10 @@ const ATSTemplate = ({ userData, visibleSections }) => {
           {experience.map((exp, index) => (
             <div key={index} style={{ marginBottom: '20px', ...itemStyle }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <p style={{ fontWeight: 'bold', color: '#000000', fontSize: '15px', margin: '0' }}>
+                <p style={{ fontWeight: 'bold', color: '#000000', fontSize: sizes.subheading, margin: '0' }}>
                   {exp.company}
                 </p>
-                <p style={{ color: '#000000', fontSize: '13px', margin: '0', whiteSpace: 'nowrap' }}>
+                <p style={{ color: '#000000', fontSize: sizes.text, margin: '0', whiteSpace: 'nowrap' }}>
                   {exp.duration}
                 </p>
               </div>
@@ -151,16 +159,16 @@ const ATSTemplate = ({ userData, visibleSections }) => {
           <h2 style={sectionHeadingStyle}>Projects</h2>
           {projects.map((project, index) => (
             <div key={index} style={{ marginBottom: '18px', ...itemStyle }}>
-              <p style={{ fontWeight: 'bold', color: '#000000', fontSize: '15px', margin: '0 0 2px 0' }}>
+              <p style={{ fontWeight: 'bold', color: '#000000', fontSize: sizes.subheading, margin: '0 0 2px 0' }}>
                 {project.title}
               </p>
               {project.techStack && (
-                <p style={{ color: '#000000', fontSize: '13px', margin: '0 0 4px 0' }}>
+                <p style={{ color: '#000000', fontSize: sizes.text, margin: '0 0 4px 0' }}>
                   <strong>Technologies:</strong> {project.techStack}
                 </p>
               )}
               {(project.githubUrl || project.liveUrl) && (
-                <p style={{ color: '#0000EE', fontSize: '13px', margin: '0 0 8px 0' }}>
+                <p style={{ color: '#0000EE', fontSize: sizes.text, margin: '0 0 8px 0' }}>
                   {project.githubUrl && (
                     <span>
                       <strong style={{ color: '#000000' }}>GitHub:</strong> {project.githubUrl}
@@ -196,10 +204,10 @@ const ATSTemplate = ({ userData, visibleSections }) => {
           {education.map((edu, index) => (
             <div key={index} style={{ marginBottom: '16px', ...itemStyle }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <p style={{ fontWeight: 'bold', color: '#000000', fontSize: '15px', margin: '0' }}>
+                <p style={{ fontWeight: 'bold', color: '#000000', fontSize: sizes.subheading, margin: '0' }}>
                   {edu.institution}
                 </p>
-                <p style={{ color: '#000000', fontSize: '13px', margin: '0', whiteSpace: 'nowrap' }}>
+                <p style={{ color: '#000000', fontSize: sizes.text, margin: '0', whiteSpace: 'nowrap' }}>
                   {edu.startYear} - {edu.endYear}
                 </p>
               </div>
@@ -207,7 +215,7 @@ const ATSTemplate = ({ userData, visibleSections }) => {
                 {edu.degree}
               </p>
               {edu.description && (
-                <p style={{ color: '#000000', fontSize: '13px', margin: '4px 0 0 0' }}>{edu.description}</p>
+                <p style={{ color: '#000000', fontSize: sizes.text, margin: '4px 0 0 0' }}>{edu.description}</p>
               )}
             </div>
           ))}

@@ -6,10 +6,10 @@ const CreativeTemplate = ({ userData, theme, visibleSections }) => {
   const fontSize = theme.fontSize === 'small' ? 'text-sm' : theme.fontSize === 'large' ? 'text-base' : 'text-[15px]';
   const hasCategories = skillCategories.technical.length > 0 || skillCategories.tools.length > 0 || skillCategories.soft.length > 0;
 
-  // Get theme colors
+  // Get theme colors - use custom colors if set, otherwise use gradient preset
   const gradientConfig = gradientPresets[theme.gradient] || gradientPresets['ocean-breeze'];
-  const primaryColor = gradientConfig.from;
-  const accentColor = gradientConfig.to;
+  const primaryColor = theme.primaryColor || gradientConfig.from;
+  const accentColor = theme.secondaryColor || gradientConfig.to;
   const headerGradient = `linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 100%)`;
 
   return (

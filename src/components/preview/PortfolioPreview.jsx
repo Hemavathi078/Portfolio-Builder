@@ -6,10 +6,12 @@ const PortfolioPreview = () => {
   const { userData, theme } = state;
   const { personal, education, experience, skills, projects } = userData;
 
-  // Get gradient colors from theme
+  // Get gradient colors from theme - use custom colors if set, otherwise use gradient preset
   const gradientConfig = gradientPresets[theme.gradient] || gradientPresets['ocean-breeze'];
-  const headerGradient = `linear-gradient(135deg, ${gradientConfig.from} 0%, ${gradientConfig.to} 100%)`;
-  const accentColor = gradientConfig.to;
+  const primaryColor = theme.primaryColor || gradientConfig.from;
+  const secondaryColor = theme.secondaryColor || gradientConfig.to;
+  const headerGradient = `linear-gradient(135deg, ${primaryColor} 0%, ${secondaryColor} 100%)`;
+  const accentColor = secondaryColor;
 
   // Font family mapping
   const fontFamilyMap = {
@@ -29,6 +31,19 @@ const PortfolioPreview = () => {
   const textMuted = isDark ? '#d1d5db' : '#374151';
   const cardBg = isDark ? '#374151' : '#f9fafb';
   const borderColor = isDark ? '#4b5563' : '#e5e7eb';
+
+  // Card style
+  const isGlass = theme.cardStyle === 'glassmorphism';
+  const cardStyle = isGlass ? {
+    backgroundColor: isDark ? 'rgba(55, 65, 81, 0.5)' : 'rgba(249, 250, 251, 0.5)',
+    backdropFilter: 'blur(10px)',
+    border: `1px solid ${borderColor}`,
+    borderRadius: '8px',
+  } : {
+    backgroundColor: cardBg,
+    border: `1px solid ${borderColor}`,
+    borderRadius: '8px',
+  };
 
   return (
     <div 
@@ -197,10 +212,8 @@ const PortfolioPreview = () => {
               <div 
                 key={index} 
                 style={{ 
+                  ...cardStyle,
                   padding: '16px',
-                  backgroundColor: cardBg,
-                  border: `1px solid ${borderColor}`,
-                  borderRadius: '8px',
                   marginBottom: '14px',
                 }}
               >

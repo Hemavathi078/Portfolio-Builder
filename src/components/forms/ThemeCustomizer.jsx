@@ -16,10 +16,23 @@ const ThemeCustomizer = () => {
   } } = settings;
 
   const updateTheme = (field, value) => {
-    dispatch({
-      type: actionTypes.SET_THEME,
-      payload: { [field]: value },
-    });
+    // If gradient is changed, also update primary and secondary colors
+    if (field === 'gradient') {
+      const gradientConfig = gradientPresets[value];
+      dispatch({
+        type: actionTypes.SET_THEME,
+        payload: { 
+          gradient: value,
+          primaryColor: gradientConfig.from,
+          secondaryColor: gradientConfig.to,
+        },
+      });
+    } else {
+      dispatch({
+        type: actionTypes.SET_THEME,
+        payload: { [field]: value },
+      });
+    }
   };
 
   const toggleSection = (section) => {
